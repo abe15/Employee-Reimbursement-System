@@ -4,39 +4,40 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.revature.project1.models.User;
+import com.revature.project1.models.UserModel;
 
-public class UserDao implements IDao<User> {
+public class UserDao implements IDao<UserModel> {
 
-    private List<User> users = new ArrayList<>();
+    private List<UserModel> users = new ArrayList<>();
 
     public UserDao() {
-        users.add(new User("John", "Smith", "Jonh", "john@domain.com", 1, 1));
-        users.add(new User("Susan", "smith", "susan", "susan@domain.com", 2, 2));
+        users.add(new UserModel("John", "Smith", "Jonh", "john@domain.com", 1, 1));
+        users.add(new UserModel("Susan", "smith", "susan", "susan@domain.com", 2, 2));
     }
 
     @Override
-    public Optional<User> get(long id) {
+    public Optional<UserModel> get(long id) {
         return Optional.ofNullable(users.get((int) id));
     }
 
     @Override
-    public List<User> getAll() {
+    public List<UserModel> getAll() {
         return users;
     }
 
     @Override
-    public void save(User user) {
+    public void save(UserModel user) {
         users.add(user);
     }
 
     @Override
-    public void update(User user, String[] params) {
+    public void update(UserModel user, String[] params) {
 
     }
 
     @Override
-    public void delete(User user) {
+    public void delete(UserModel user) {
         users.remove(user);
     }
+
 }

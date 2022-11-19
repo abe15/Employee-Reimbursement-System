@@ -1,6 +1,6 @@
 package com.revature.project1.models;
 
-public class User {
+public class UserModel {
 
     private String firstName;
     private String lastName;
@@ -49,13 +49,19 @@ public class User {
         return userRoleId;
     }
 
-    public User(String firstName, String lastName, String username, String email, int userId, int userRoleId) {
+    public UserModel(String firstName, String lastName, String username, String email, int userId, int userRoleId) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.email = email;
         this.userId = userId;
         this.userRoleId = userRoleId;
+    }
+
+    @Override
+    public String toString() {
+
+        return "[First Name: " + firstName + " Last Name: " + lastName + "]";
     }
 
 }

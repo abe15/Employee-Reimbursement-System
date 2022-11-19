@@ -1,38 +1,43 @@
 package com.revature.project1.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import com.revature.project1.models.ReimbursementTicketModel;
 
-import com.revature.project1.models.ReimbursementTicket;
+public class ReimbursementDAO implements IDao<ReimbursementTicketModel> {
 
-public class ReimbursementDAO implements IDao<ReimbursementTicket> {
+    private List<ReimbursementTicketModel> reimbTickets = new ArrayList<>();
 
-    @Override
-    public Optional<ReimbursementTicket> get(long id) {
-        // TODO Auto-generated method stub
-        return Optional.empty();
+    public ReimbursementDAO() {
+        /** empty n */
     }
 
     @Override
-    public List<ReimbursementTicket> getAll() {
+    public Optional<ReimbursementTicketModel> get(long id) {
+        return Optional.ofNullable(reimbTickets.get((int) id));
+    }
+
+    @Override
+    public List<ReimbursementTicketModel> getAll() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void save(ReimbursementTicket t) {
+    public void save(ReimbursementTicketModel t) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void update(ReimbursementTicket t, String[] params) {
+    public void update(ReimbursementTicketModel t, String[] params) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void delete(ReimbursementTicket t) {
+    public void delete(ReimbursementTicketModel t) {
         // TODO Auto-generated method stub
 
     }
