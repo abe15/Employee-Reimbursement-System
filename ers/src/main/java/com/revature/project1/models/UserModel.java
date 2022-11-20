@@ -6,11 +6,16 @@ public class UserModel {
     private String lastName;
     private String username;
     private String email;
-    private final int userId;
-    private final int userRoleId;
+    private String password;
+    private int userId;
+    private int userRoleId;
 
     public String getFirstName() {
         return firstName;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public void setFirstName(String firstName) {
@@ -49,13 +54,13 @@ public class UserModel {
         return userRoleId;
     }
 
-    public UserModel(String firstName, String lastName, String username, String email, int userId, int userRoleId) {
+    public UserModel(String firstName, String lastName, String username, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.email = email;
-        this.userId = userId;
-        this.userRoleId = userRoleId;
+        this.password = password;
+
     }
 
     @Override
