@@ -10,6 +10,7 @@ import com.revature.project1.service.reimbursementTicket.IReimbursementDao;
 import com.revature.project1.service.reimbursementTicket.impl.ReimbursementDaoList;
 import com.revature.project1.service.user.IUserDao;
 import com.revature.project1.service.user.impl.UserDaoList;
+import com.revature.project1.service.user.impl.UserDaoSQL;
 
 public class App {
 
@@ -20,7 +21,7 @@ public class App {
     private static String reimbUrl = baseUrl + "/reimbursement-tickets";
 
     private static IReimbursementDao reimbDao = new ReimbursementDaoList();
-    private static IUserDao userDao = new UserDaoList();
+    private static IUserDao userDao = new UserDaoSQL();
 
     public static void main(String[] args) {
         System.out.println("Hello World!");
