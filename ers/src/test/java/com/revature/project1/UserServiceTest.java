@@ -10,9 +10,9 @@ import javax.swing.text.html.Option;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 
+import com.revature.project1.dao.user.IUserDao;
+import com.revature.project1.dao.user.impl.UserDaoList;
 import com.revature.project1.models.UserModel;
-import com.revature.project1.service.user.IUserDao;
-import com.revature.project1.service.user.impl.UserDaoList;
 
 /**
  * Unit test for simple App.

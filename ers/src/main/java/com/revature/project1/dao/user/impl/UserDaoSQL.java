@@ -1,4 +1,4 @@
-package com.revature.project1.service.user.impl;
+package com.revature.project1.dao.user.impl;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -7,9 +7,10 @@ import java.util.Optional;
 import java.util.Properties;
 
 import org.postgresql.*;
+
+import com.revature.project1.dao.user.IUserDao;
 import com.revature.project1.models.UserModel;
-import com.revature.project1.service.user.IUserDao;
-import com.revature.project1.utili.JDBCConnectionUtil;
+import com.revature.project1.util.JDBCConnectionUtil;
 
 public class UserDaoSQL implements IUserDao {
 
@@ -93,7 +94,7 @@ public class UserDaoSQL implements IUserDao {
     }
 
     @Override
-    public void save(UserModel user) {
+    public int save(UserModel user) {
 
         try (PreparedStatement st = conn.prepareStatement(
                 "INSERT INTO public.ers_users (ers_username, ers_password,user_first_name,user_last_name, user_email,user_role_id) VALUES (?, ?,?,?,?,1);")) {
@@ -104,12 +105,13 @@ public class UserDaoSQL implements IUserDao {
             st.setString(5, user.getEmail());
 
             int rowsDeleted = st.executeUpdate();
-
             System.out.println(rowsDeleted);
+            return 1;
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        return 0;
 
     }
 

@@ -1,4 +1,4 @@
-package com.revature.project1.service.user;
+package com.revature.project1.dao.user;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +15,6 @@ public interface IUserDao {
     public List<UserModel> getAllUsers();
 
     // dd
-    public void save(UserModel user);
+    public int save(UserModel user);
 
 }

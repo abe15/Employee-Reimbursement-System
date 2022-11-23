@@ -1,4 +1,4 @@
-package com.revature.project1.utili;
+package com.revature.project1.util;
 
 import org.slf4j.LoggerFactory;
 

@@ -1,11 +1,11 @@
-package com.revature.project1.service.user.impl;
+package com.revature.project1.dao.user.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.revature.project1.dao.user.IUserDao;
 import com.revature.project1.models.UserModel;
-import com.revature.project1.service.user.IUserDao;
 
 public class UserDaoList implements IUserDao {
 
@@ -42,8 +42,9 @@ public class UserDaoList implements IUserDao {
     }
 
     @Override
-    public void save(UserModel user) {
+    public int save(UserModel user) {
         users.add(user);
+        return 1;
 
     }
 

@@ -7,8 +7,6 @@ public class UserModel {
     private String username;
     private String email;
     private String password;
-    private int userId;
-    private int userRoleId;
 
     public String getFirstName() {
         return firstName;
@@ -18,16 +16,16 @@ public class UserModel {
         return password;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirstName(String firstname) {
+        this.firstName = firstname;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLastName(String lastname) {
+        this.lastName = lastname;
     }
 
     public String getUsername() {
@@ -46,17 +44,13 @@ public class UserModel {
         this.email = email;
     }
 
-    public int getUserId() {
-        return userId;
+    public UserModel() {
+
     }
 
-    public int getUserRoleId() {
-        return userRoleId;
-    }
-
-    public UserModel(String firstName, String lastName, String username, String email, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public UserModel(String firstname, String lastname, String username, String email, String password) {
+        this.firstName = firstname;
+        this.lastName = lastname;
         this.username = username;
         this.email = email;
         this.password = password;
