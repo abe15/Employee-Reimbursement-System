@@ -9,6 +9,7 @@ import java.util.Properties;
 import org.postgresql.*;
 import com.revature.project1.models.UserModel;
 import com.revature.project1.service.user.IUserDao;
+import com.revature.project1.utili.JDBCConnectionUtil;
 
 public class UserDaoSQL implements IUserDao {
 
@@ -25,29 +26,24 @@ public class UserDaoSQL implements IUserDao {
     Connection conn;
 
     public UserDaoSQL() {
-        try {
-            Properties props = new Properties();
-            props.setProperty("user", "postgres");
-            props.setProperty("password", "pass");
-
-            conn = DriverManager.getConnection(url, props);
-        } catch (SQLException e) {
-        }
-
+        conn = JDBCConnectionUtil.getConnection();
     }
 
     @Override
     public Optional<UserModel> findByUserName(String userName) {
         Optional<UserModel> res;
         String s = "";
-        try (Statement st = conn.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM ers_users WHERE ers_username = " + userName);) {
+        try (PreparedStatement st = conn.prepareStatement("SELECT * FROM ers_users WHERE ers_username = ?;");) {
+
+            st.setString(1, userName);
+            ResultSet rs = st.executeQuery();
             ResultSetMetaData rsmd = rs.getMetaData();
             int columnsNumber = rsmd.getColumnCount();
             while (rs.next()) {
 
-                return Optional.of(new UserModel(rs.getString(3), rs.getString(4), rs.getString(1), rs.getString(5),
-                        rs.getString(2)));
+                return Optional.of(new UserModel(rs.getString("user_first_name"), rs.getString("user_last_name"),
+                        rs.getString("ers_username"), rs.getString("user_email"),
+                        rs.getString("ers_password")));
 
             }
 
@@ -76,8 +72,8 @@ public class UserDaoSQL implements IUserDao {
     }
 
     @Override
-    public List<Optional<UserModel>> getAllUsers() {
-        List<Optional<UserModel>> res = new ArrayList<>();
+    public List<UserModel> getAllUsers() {
+        List<UserModel> res = new ArrayList<>();
         String s = "";
         try (Statement st = conn.createStatement();
                 ResultSet rs = st.executeQuery("SELECT * FROM ers_users");) {
@@ -86,8 +82,8 @@ public class UserDaoSQL implements IUserDao {
             while (rs.next()) {
 
                 System.out.println(rs.getString(4) + rs.getString(1) + rs.getString(2) + rs.getString(3));
-                res.add(Optional.of(new UserModel(rs.getString(4), rs.getString(5), rs.getString(1), rs.getString(6),
-                        rs.getString(3))));
+                res.add(new UserModel(rs.getString(4), rs.getString(5), rs.getString(1), rs.getString(6),
+                        rs.getString(3)));
 
             }
 

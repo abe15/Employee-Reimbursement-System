@@ -12,8 +12,9 @@ public interface IUserDao {
 
     public Optional<UserModel> findByEmail(String email);
 
-    public List<Optional<UserModel>> getAllUsers();
+    public List<UserModel> getAllUsers();
 
+    // dd
     public void save(UserModel user);
 
 }

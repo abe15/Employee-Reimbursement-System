@@ -9,18 +9,15 @@ import com.revature.project1.service.user.IUserDao;
 
 public class UserDaoList implements IUserDao {
 
-    private List<Optional<UserModel>> users = new ArrayList<>();
+    private List<UserModel> users = new ArrayList<>();
 
     @Override
     public Optional<UserModel> findByUserName(String userName) {
-        for (Optional<UserModel> user : users) {
-            if (user.isPresent()) {
+        for (UserModel user : users) {
 
-                if (user.get().getUsername().equals(userName)) {
+            if (user.getUsername().equals(userName)) {
 
-                    return user;
-                }
-
+                return Optional.of(user);
             }
 
         }
@@ -30,23 +27,23 @@ public class UserDaoList implements IUserDao {
 
     @Override
     public Optional<UserModel> findByEmail(String email) {
-        for (Optional<UserModel> user : users) {
-            if (user.isPresent() && user.get().getEmail().equals(email)) {
-                return user;
+        for (UserModel user : users) {
+            if (user.getEmail().equals(email)) {
+                return Optional.of(user);
             }
         }
         return Optional.empty();
     }
 
     @Override
-    public List<Optional<UserModel>> getAllUsers() {
+    public List<UserModel> getAllUsers() {
         // TODO Auto-generated method stub
         return users;
     }
 
     @Override
     public void save(UserModel user) {
-        users.add(Optional.of(user));
+        users.add(user);
 
     }
 
