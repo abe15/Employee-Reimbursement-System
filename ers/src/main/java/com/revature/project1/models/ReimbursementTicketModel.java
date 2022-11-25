@@ -1,19 +1,19 @@
 package com.revature.project1.models;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Optional;
 
 public class ReimbursementTicketModel {
-    private final int reimbId;
-    private final int reimbTypeId;
+    private Integer reimbId;
+    private Integer reimbTypeId;
     private double reimbAmount;
-    private Date reimbSubmitted;
-    private Optional<Date> reimbResolved;
+    private LocalDate reimbSubmitted;
+    private Optional<LocalDate> reimbResolved;
     private String reimbDescription;
     private String reimbReceipt;
-    private String reimbType;
-    private String reimbAuthor;
-    private String reimbResolver;
+    private Integer reimbStatusId;
+    private Integer reimbAuthor;
+    private Integer reimbResolver;
 
     public int getReimbId() {
         return reimbId;
@@ -21,6 +21,10 @@ public class ReimbursementTicketModel {
 
     public int getReimbTypeId() {
         return reimbTypeId;
+    }
+
+    public void setReimbTypeId(int a) {
+        this.reimbTypeId = a;
     }
 
     public double getReimbAmount() {
@@ -31,19 +35,19 @@ public class ReimbursementTicketModel {
         this.reimbAmount = reimbAmount;
     }
 
-    public Date getReimbSubmitted() {
+    public LocalDate getReimbSubmitted() {
         return reimbSubmitted;
     }
 
-    public void setReimbSubmitted(Date reimbSubmitted) {
+    public void setReimbSubmitted(LocalDate reimbSubmitted) {
         this.reimbSubmitted = reimbSubmitted;
     }
 
-    public Optional<Date> getReimbResolved() {
+    public Optional<LocalDate> getReimbResolved() {
         return reimbResolved;
     }
 
-    public void setReimbResolved(Optional<Date> reimbResolved) {
+    public void setReimbResolved(Optional<LocalDate> reimbResolved) {
         this.reimbResolved = reimbResolved;
     }
 
@@ -63,33 +67,36 @@ public class ReimbursementTicketModel {
         this.reimbReceipt = reimbReceipt;
     }
 
-    public String getReimbType() {
-        return reimbType;
+    public Integer getReimbStausId() {
+        return reimbStatusId;
     }
 
-    public void setReimbType(String reimbType) {
-        this.reimbType = reimbType;
+    public void setReimbStausId(Integer reimbType) {
+        this.reimbStatusId = reimbType;
     }
 
-    public String getReimbAuthor() {
+    public Integer getReimbAuthor() {
         return reimbAuthor;
     }
 
-    public void setReimbAuthor(String reimbAuthor) {
+    public void setReimbAuthor(Integer reimbAuthor) {
         this.reimbAuthor = reimbAuthor;
     }
 
-    public String getReimbResolver() {
+    public Integer getReimbResolver() {
         return reimbResolver;
     }
 
-    public void setReimbResolver(String reimbResolver) {
+    public void setReimbResolver(Integer reimbResolver) {
         this.reimbResolver = reimbResolver;
     }
 
-    public ReimbursementTicketModel(int reimbId, int reimbTypeId, double reimbAmount, Date reimbSubmitted,
-            Optional<Date> reimbResolved, String reimbDescription, String reimbReceipt, String reimbType,
-            String reimbAuthor, String reimbResolver) {
+    public ReimbursementTicketModel() {
+    }
+
+    public ReimbursementTicketModel(int reimbId, int reimbTypeId, double reimbAmount, LocalDate reimbSubmitted,
+            Optional<LocalDate> reimbResolved, String reimbDescription, String reimbReceipt, Integer reimbType,
+            Integer reimbAuthor, Integer reimbResolver) {
         this.reimbId = reimbId;
         this.reimbTypeId = reimbTypeId;
         this.reimbAmount = reimbAmount;
@@ -97,7 +104,7 @@ public class ReimbursementTicketModel {
         this.reimbResolved = reimbResolved;
         this.reimbDescription = reimbDescription;
         this.reimbReceipt = reimbReceipt;
-        this.reimbType = reimbType;
+        this.reimbStatusId = reimbType;
         this.reimbAuthor = reimbAuthor;
         this.reimbResolver = reimbResolver;
     }

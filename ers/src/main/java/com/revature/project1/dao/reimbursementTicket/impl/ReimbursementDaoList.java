@@ -28,7 +28,7 @@ public class ReimbursementDaoList implements IReimbursementDao {
     }
 
     @Override
-    public List<ReimbursementTicketModel> getTicketsByUserName(String username) {
+    public List<ReimbursementTicketModel> getTicketsByAuthorUserName(Integer username) {
         List<ReimbursementTicketModel> userTickets = new ArrayList<>();
         for (ReimbursementTicketModel ticket : tickets) {
             if (ticket.getReimbAuthor().equals(username)) {
@@ -40,16 +40,16 @@ public class ReimbursementDaoList implements IReimbursementDao {
     }
 
     @Override
-    public void save(ReimbursementTicketModel t) {
+    public int save(ReimbursementTicketModel t) {
         tickets.add(t);
-
+        return 1;
     }
 
     @Override
-    public void updateTicketStatusById(long t, String[] params) {
+    public void updateTicketStatusById(Integer id, Integer statusId, Integer resolver) {
 
         for (ReimbursementTicketModel ticket : tickets) {
-            if (ticket.getReimbId() == t) {
+            if (ticket.getReimbId() == id) {
                 ticket.setReimbResolved(null);
             }
         }

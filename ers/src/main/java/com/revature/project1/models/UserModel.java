@@ -7,6 +7,24 @@ public class UserModel {
     private String username;
     private String email;
     private String password;
+    private Integer userId;
+    private Integer userRoleId;
+
+    public Integer getUserRoleId() {
+        return userRoleId;
+    }
+
+    public void setUserRoleId(Integer userRoleId) {
+        this.userRoleId = userRoleId;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
     public String getFirstName() {
         return firstName;

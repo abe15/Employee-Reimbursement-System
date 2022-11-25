@@ -10,10 +10,10 @@ public interface IReimbursementDao {
 
     public List<ReimbursementTicketModel> getAll();
 
-    public List<ReimbursementTicketModel> getTicketsByUserName(String username);
+    public List<ReimbursementTicketModel> getTicketsByAuthorUserName(Integer username);
 
-    public void save(ReimbursementTicketModel t);
+    public int save(ReimbursementTicketModel t);
 
-    public void updateTicketStatusById(long t, String[] params);
+    public void updateTicketStatusById(Integer id, Integer statusId, Integer resolver);
 
 }

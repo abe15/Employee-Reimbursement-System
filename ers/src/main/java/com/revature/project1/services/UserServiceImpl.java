@@ -37,19 +37,19 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public boolean login(String username, String password) {
+    public Optional<UserModel> login(String username, String password) {
         logger.info("UserServiceImpl::login() called. User log in...");
 
         Optional<UserModel> user = userDao.findByUserName(username);
 
         if (user.isPresent() && user.get().getPassword().equals(password)) {
-            logger.info("UserServiceImpl::login() called. User name and password match found.");
+            logger.info("User name and password match found.");
 
-            return true;
+            return user;
         }
 
-        logger.info("UserServiceImpl::login() called. User name and password match NOT found.");
-        return false;
+        logger.info("User name and password match NOT found.");
+        return Optional.empty();
 
     }
 

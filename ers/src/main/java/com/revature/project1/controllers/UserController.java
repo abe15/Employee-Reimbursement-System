@@ -1,6 +1,7 @@
 package com.revature.project1.controllers;
 
 import java.security.Key;
+import java.util.Optional;
 
 import javax.crypto.SecretKey;
 
@@ -13,6 +14,7 @@ import com.revature.project1.dao.user.impl.UserDaoSQL;
 import com.revature.project1.models.UserModel;
 import com.revature.project1.services.IUserService;
 import com.revature.project1.services.UserServiceImpl;
+import com.revature.project1.util.SecretKeyHolder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.javalin.http.Handler;
@@ -24,7 +26,7 @@ import io.jsonwebtoken.security.Keys;
 public class UserController {
 
     private static Logger logger = LoggerFactory.getLogger(UserController.class);
-    private static SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+
     private static IUserService uServ = new UserServiceImpl();
 
     // handle registration request
@@ -85,12 +87,36 @@ public class UserController {
         ObjectMapper om = new ObjectMapper();
         om.registerModule(new JavaTimeModule());
         UsernamePasswordCombo target = om.readValue(body, UsernamePasswordCombo.class);
-        boolean loginSuccessful = uServ.login(target.getUsername(), target.getPassword());
+        Optional<UserModel> user = uServ.login(target.getUsername(), target.getPassword());
+
+        // 4. render the response
+        if (user.isPresent()) {
+            ctx.html("User log in successful");
+            String jws = Jwts.builder().setSubject(target.getUsername()).claim("user-id", user.get().getUserId())
+                    .claim("user-role", 1)
+                    .signWith(SecretKeyHolder.key).compact();
+            ctx.result(jws);
+            ctx.status(HttpCode.ACCEPTED);
+        } else {
+            ctx.html("User log in failed");
+            ctx.status(HttpCode.UNAUTHORIZED);
+        }
+    };
+
+    public static Handler getAllUsers = ctx -> {
+
+        logger.info("Getting all Users...");
+
+        String body = ctx.body();
+        ObjectMapper om = new ObjectMapper();
+        om.registerModule(new JavaTimeModule());
+        UsernamePasswordCombo target = om.readValue(body, UsernamePasswordCombo.class);
+        boolean loginSuccessful = false;// uServ.login(target.getUsername(), target.getPassword());
 
         // 4. render the response
         if (loginSuccessful == true) {
             ctx.html("User log in successful");
-            String jws = Jwts.builder().setSubject(target.getUsername()).signWith(key).compact();
+            String jws = Jwts.builder().setSubject(target.getUsername()).signWith(SecretKeyHolder.key).compact();
             ctx.result(jws);
             ctx.status(HttpCode.ACCEPTED);
         } else {

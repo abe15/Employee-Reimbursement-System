@@ -42,10 +42,12 @@ public class UserDaoSQL implements IUserDao {
             int columnsNumber = rsmd.getColumnCount();
             while (rs.next()) {
 
-                return Optional.of(new UserModel(rs.getString("user_first_name"), rs.getString("user_last_name"),
+                res = Optional.of(new UserModel(rs.getString("user_first_name"), rs.getString("user_last_name"),
                         rs.getString("ers_username"), rs.getString("user_email"),
                         rs.getString("ers_password")));
-
+                res.get().setUserId(rs.getInt("ers_users_id"));
+                res.get().setUserRoleId(rs.getInt("user_role_id"));
+                return res;
             }
 
         } catch (SQLException e) {
@@ -97,13 +99,13 @@ public class UserDaoSQL implements IUserDao {
     public int save(UserModel user) {
 
         try (PreparedStatement st = conn.prepareStatement(
-                "INSERT INTO public.ers_users (ers_username, ers_password,user_first_name,user_last_name, user_email,user_role_id) VALUES (?, ?,?,?,?,1);")) {
+                "INSERT INTO public.ers_users (ers_username, ers_password,user_first_name,user_last_name, user_email,user_role_id) VALUES (?, ?,?,?,?,?);")) {
             st.setString(1, user.getUsername());
             st.setString(2, user.getPassword());
             st.setString(3, user.getFirstName());
             st.setString(4, user.getLastName());
             st.setString(5, user.getEmail());
-
+            st.setInt(6, 1);
             int rowsDeleted = st.executeUpdate();
             System.out.println(rowsDeleted);
             return 1;
