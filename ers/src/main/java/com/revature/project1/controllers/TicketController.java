@@ -97,7 +97,8 @@ public class TicketController {
         String[] jwtHeaders = parseJwt(ctx);
         ReimbursementTicketModel t = new ReimbursementTicketModel();
         t.setReimbResolver(Integer.parseInt(jwtHeaders[1]));
-        List<ReimbursementTicketModel> t = tServ.updateReimbTicket();
+        t.setReimbStausId(2);
+        boolean a = tServ.updateReimbTicket(t);
         ctx.result(t.toString());
         ctx.status(HttpCode.CREATED);
     };

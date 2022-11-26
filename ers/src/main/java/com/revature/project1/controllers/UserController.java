@@ -35,24 +35,34 @@ public class UserController {
         logger.info("User is making a registration request...");
 
         String body = ctx.body();
-
+        ctx.bodyValidator(UserModel.class);
         // convert the body into a User object
         ObjectMapper om = new ObjectMapper();
         om.registerModule(new JavaTimeModule());
-        UserModel target = om.readValue(body, UserModel.class);
-        logger.info("New User: " + target);
 
-        // 3. do service call
-        boolean isCreated = uServ.registerUser(target);
+        try {
+            UserModel target = om.readValue(body, UserModel.class);
+            logger.info("New User: " + target);
 
-        // 4. render the response
-        if (isCreated == true) {
-            ctx.html("The new user has been created successfully.");
-            ctx.status(HttpCode.CREATED);
-        } else {
-            ctx.html("Error during creation. Try again.");
-            ctx.status(HttpCode.NO_CONTENT);
+            // 3. do service call
+            boolean isCreated = uServ.registerUser(target);
+
+            // 4. render the response
+            if (isCreated == true) {
+                ctx.result("The new user has been created successfully.");
+                ctx.status(HttpCode.CREATED);
+            } else {
+                ctx.result("Error during creation. Try again.");
+                ctx.status(HttpCode.CONFLICT);
+
+            }
+
+        } catch (Exception e) {
+            logger.warn("Invalid data " + e.getMessage());
+            ctx.result("Validation failed");
+            ctx.status(HttpCode.BAD_REQUEST);
         }
+
     };
 
     static class UsernamePasswordCombo {

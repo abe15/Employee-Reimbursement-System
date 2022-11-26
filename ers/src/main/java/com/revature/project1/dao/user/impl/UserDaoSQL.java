@@ -7,6 +7,8 @@ import java.util.Optional;
 import java.util.Properties;
 
 import org.postgresql.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.revature.project1.dao.user.IUserDao;
 import com.revature.project1.models.UserModel;
@@ -16,14 +18,16 @@ public class UserDaoSQL implements IUserDao {
 
     String url = "jdbc:postgresql://localhost:5436/postgres";
 
-    String ers_users_id = "ers_users_id";
-    String ers_username = "ers_username";
-    String ers_password = "ers_password";
-    String user_first_name = "user_first_name";
-    String user_last_name = "user_last_name";
-    String user_email = "user_email";
-    String user_role_id = "ers_users_id";
-
+    /*
+     * String ers_users_id = "ers_users_id";
+     * String ers_username = "ers_username";
+     * String ers_password = "ers_password";
+     * String user_first_name = "user_first_name";
+     * String user_last_name = "user_last_name";
+     * String user_email = "user_email";
+     * String user_role_id = "ers_users_id";
+     */
+    private static Logger logger = LoggerFactory.getLogger(UserDaoSQL.class);
     Connection conn;
 
     public UserDaoSQL() {
@@ -33,7 +37,7 @@ public class UserDaoSQL implements IUserDao {
     @Override
     public Optional<UserModel> findByUserName(String userName) {
         Optional<UserModel> res;
-        String s = "";
+
         try (PreparedStatement st = conn.prepareStatement("SELECT * FROM ers_users WHERE ers_username = ?;");) {
 
             st.setString(1, userName);
@@ -97,23 +101,29 @@ public class UserDaoSQL implements IUserDao {
 
     @Override
     public int save(UserModel user) {
+        int userId = 0;
 
+        logger.info("UserDaoSQL::save() called. Creating new user...");
         try (PreparedStatement st = conn.prepareStatement(
-                "INSERT INTO public.ers_users (ers_username, ers_password,user_first_name,user_last_name, user_email,user_role_id) VALUES (?, ?,?,?,?,?);")) {
+                "INSERT INTO public.ers_users (ers_username, ers_password,user_first_name,user_last_name, user_email,user_role_id) VALUES (?, ?,?,?,?,?);",
+                Statement.RETURN_GENERATED_KEYS)) {
             st.setString(1, user.getUsername());
             st.setString(2, user.getPassword());
             st.setString(3, user.getFirstName());
             st.setString(4, user.getLastName());
             st.setString(5, user.getEmail());
             st.setInt(6, 1);
-            int rowsDeleted = st.executeUpdate();
-            System.out.println(rowsDeleted);
-            return 1;
+            st.executeUpdate();
+            ResultSet rs = st.getGeneratedKeys();
+            rs.next();
+            userId = rs.getInt("ers_users_Id");
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.warn("UserDaoSQL::save(). Failed user creation");
+            logger.error("UserDaoSQL::save()." + e.getMessage());
+
         }
-        return 0;
+        return userId;
 
     }
 
