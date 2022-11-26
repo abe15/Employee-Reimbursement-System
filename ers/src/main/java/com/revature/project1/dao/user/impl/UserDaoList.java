@@ -37,7 +37,7 @@ public class UserDaoList implements IUserDao {
 
     @Override
     public List<UserModel> getAllUsers() {
-        // TODO Auto-generated method stub
+
         return users;
     }
 

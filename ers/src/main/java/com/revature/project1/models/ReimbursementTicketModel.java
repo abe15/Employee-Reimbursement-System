@@ -71,8 +71,8 @@ public class ReimbursementTicketModel {
         return reimbStatusId;
     }
 
-    public void setReimbStausId(Integer reimbType) {
-        this.reimbStatusId = reimbType;
+    public void setReimbStausId(Integer reimbStatusType) {
+        this.reimbStatusId = reimbStatusType;
     }
 
     public Integer getReimbAuthor() {

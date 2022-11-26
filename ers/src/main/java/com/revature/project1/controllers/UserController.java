@@ -1,27 +1,22 @@
 package com.revature.project1.controllers;
 
-import java.security.Key;
 import java.util.Optional;
-
-import javax.crypto.SecretKey;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.project1.dao.user.IUserDao;
-import com.revature.project1.dao.user.impl.UserDaoSQL;
+
 import com.revature.project1.models.UserModel;
 import com.revature.project1.services.IUserService;
 import com.revature.project1.services.UserServiceImpl;
 import com.revature.project1.util.SecretKeyHolder;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.javalin.http.Handler;
 import io.javalin.http.HttpCode;
-import io.jsonwebtoken.SignatureAlgorithm;
+
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
 
 public class UserController {
 
@@ -40,14 +35,15 @@ public class UserController {
         ObjectMapper om = new ObjectMapper();
         om.registerModule(new JavaTimeModule());
 
+        // try deserializing json with registration info
         try {
             UserModel target = om.readValue(body, UserModel.class);
-            logger.info("New User: " + target);
+            logger.info("New User: %s{}", target);
 
-            // 3. do service call
+            // attempt to register user
             boolean isCreated = uServ.registerUser(target);
 
-            // 4. render the response
+            // check whether registration was successful
             if (isCreated == true) {
                 ctx.result("The new user has been created successfully.");
                 ctx.status(HttpCode.CREATED);
@@ -58,13 +54,16 @@ public class UserController {
             }
 
         } catch (Exception e) {
-            logger.warn("Invalid data " + e.getMessage());
+            // deserializing json with registration info failed.
+            // incorrect property names or extra/missing input
+            logger.warn("Invalid data : %s{}", e.getMessage());
             ctx.result("Validation failed");
             ctx.status(HttpCode.BAD_REQUEST);
         }
 
     };
 
+    // Class used to deserialize username password for log in
     static class UsernamePasswordCombo {
         private String username;
 
@@ -96,21 +95,31 @@ public class UserController {
         String body = ctx.body();
         ObjectMapper om = new ObjectMapper();
         om.registerModule(new JavaTimeModule());
-        UsernamePasswordCombo target = om.readValue(body, UsernamePasswordCombo.class);
-        Optional<UserModel> user = uServ.login(target.getUsername(), target.getPassword());
+        try {
+            UsernamePasswordCombo target = om.readValue(body, UsernamePasswordCombo.class);
+            Optional<UserModel> user = uServ.login(target.getUsername(), target.getPassword());
 
-        // 4. render the response
-        if (user.isPresent()) {
-            ctx.html("User log in successful");
-            String jws = Jwts.builder().setSubject(target.getUsername()).claim("user-id", user.get().getUserId())
-                    .claim("user-role", 1)
-                    .signWith(SecretKeyHolder.key).compact();
-            ctx.result(jws);
-            ctx.status(HttpCode.ACCEPTED);
-        } else {
-            ctx.html("User log in failed");
-            ctx.status(HttpCode.UNAUTHORIZED);
+            // 4. render the response
+            if (user.isPresent()) {
+                logger.info("User log in successful");
+                ctx.html("User log in successful");
+                String jws = Jwts.builder().setSubject(target.getUsername()).claim("user-id", user.get().getUserId())
+                        .claim("user-role", 1)
+                        .signWith(SecretKeyHolder.key).compact();
+                ctx.result(jws);
+                ctx.status(HttpCode.ACCEPTED);
+            } else {
+                logger.info("Invalid username or password");
+                ctx.html("Invalid username or password");
+                ctx.status(HttpCode.UNAUTHORIZED);
+            }
+
+        } catch (Exception e) {
+            logger.info("Invalid input");
+            ctx.result("Invalid input");
+            ctx.status(HttpCode.BAD_REQUEST);
         }
+
     };
 
     public static Handler getAllUsers = ctx -> {

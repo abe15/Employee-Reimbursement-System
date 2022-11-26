@@ -67,7 +67,6 @@ public class App {
         app.get("/", ctx -> ctx.result("Hello World"), Role.ANYONE);
 
         app.post(registerUrl, UserController.register, Role.ANYONE);
-
         app.post(loginUrl, UserController.login, Role.ANYONE);
 
         app.post(reimbUrl, TicketController.submitTicket, Role.EMPLOYEE, Role.ADMIN, Role.MANAGER);
@@ -76,7 +75,7 @@ public class App {
 
         app.post(reimbUpdateUrl, TicketController.updateTicketStatus, Role.ADMIN, Role.MANAGER);
 
-        app.start(7071);
+        app.start(7070);
 
     }
 }
