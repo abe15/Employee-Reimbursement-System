@@ -1,5 +1,9 @@
 package com.revature.project1.models;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 public class UserModel {
 
     private String firstName;
@@ -78,7 +82,16 @@ public class UserModel {
     @Override
     public String toString() {
 
-        return "[First Name: " + firstName + " Last Name: " + lastName + "]";
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        JavaTimeModule module = new JavaTimeModule();
+        objectMapper.registerModule(module);
+        String json = "";
+        try {
+            json = objectMapper.writeValueAsString(this);
+        } catch (Exception e) {
+        }
+        return json;
     }
 
 }

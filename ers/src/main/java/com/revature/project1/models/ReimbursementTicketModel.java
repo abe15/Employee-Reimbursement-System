@@ -1,29 +1,82 @@
 package com.revature.project1.models;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 public class ReimbursementTicketModel {
     private Integer reimbId;
     private Integer reimbTypeId;
     private double reimbAmount;
-    private LocalDate reimbSubmitted;
-    private Optional<LocalDate> reimbResolved;
+    private LocalDateTime reimbSubmitted;
+    private LocalDateTime reimbResolved;
     private String reimbDescription;
     private String reimbReceipt;
     private Integer reimbStatusId;
     private Integer reimbAuthor;
     private Integer reimbResolver;
+    private String reimbTypeName;
+
+    public String getReimbTypeName() {
+        return reimbTypeName;
+    }
+
+    public void setReimbTypeName(String reimbTypeName) {
+        // --lodging 1, travel 2, food 3, other 4
+        switch (reimbTypeName) {
+            case "LODGING":
+                reimbTypeId = 1;
+                break;
+            case "TRAVEL":
+                reimbTypeId = 2;
+                break;
+            case "FOOD":
+                reimbTypeId = 3;
+                break;
+            default:
+                reimbTypeId = 4;
+                break;
+
+        }
+
+        this.reimbTypeName = reimbTypeName;
+    }
 
     public int getReimbId() {
         return reimbId;
     }
 
-    public int getReimbTypeId() {
+    public void setReimbId(int s) {
+        reimbId = s;
+    }
+
+    public Integer getReimbTypeId() {
         return reimbTypeId;
     }
 
     public void setReimbTypeId(int a) {
+        // --lodging 1, travel 2, food 3, other 4
+        switch (a) {
+            case 1:
+                reimbTypeName = "LODGING";
+                break;
+            case 2:
+                reimbTypeName = "TRAVEL";
+                break;
+            case 3:
+                reimbTypeName = "FOOD";
+                break;
+            default:
+                reimbTypeName = "OTHER";
+                break;
+
+        }
+
         this.reimbTypeId = a;
     }
 
@@ -35,19 +88,19 @@ public class ReimbursementTicketModel {
         this.reimbAmount = reimbAmount;
     }
 
-    public LocalDate getReimbSubmitted() {
+    public LocalDateTime getReimbSubmitted() {
         return reimbSubmitted;
     }
 
-    public void setReimbSubmitted(LocalDate reimbSubmitted) {
+    public void setReimbSubmitted(LocalDateTime reimbSubmitted) {
         this.reimbSubmitted = reimbSubmitted;
     }
 
-    public Optional<LocalDate> getReimbResolved() {
+    public LocalDateTime getReimbResolved() {
         return reimbResolved;
     }
 
-    public void setReimbResolved(Optional<LocalDate> reimbResolved) {
+    public void setReimbResolved(LocalDateTime reimbResolved) {
         this.reimbResolved = reimbResolved;
     }
 
@@ -94,8 +147,8 @@ public class ReimbursementTicketModel {
     public ReimbursementTicketModel() {
     }
 
-    public ReimbursementTicketModel(int reimbId, int reimbTypeId, double reimbAmount, LocalDate reimbSubmitted,
-            Optional<LocalDate> reimbResolved, String reimbDescription, String reimbReceipt, Integer reimbType,
+    public ReimbursementTicketModel(int reimbId, int reimbTypeId, double reimbAmount, LocalDateTime reimbSubmitted,
+            LocalDateTime reimbResolved, String reimbDescription, String reimbReceipt, Integer reimbType,
             Integer reimbAuthor, Integer reimbResolver) {
         this.reimbId = reimbId;
         this.reimbTypeId = reimbTypeId;
@@ -109,4 +162,18 @@ public class ReimbursementTicketModel {
         this.reimbResolver = reimbResolver;
     }
 
+    @Override
+    public String toString() {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        JavaTimeModule module = new JavaTimeModule();
+        objectMapper.registerModule(module);
+        String json = "";
+        try {
+            json = objectMapper.writeValueAsString(this);
+        } catch (Exception e) {
+        }
+        return json;
+    }
 }

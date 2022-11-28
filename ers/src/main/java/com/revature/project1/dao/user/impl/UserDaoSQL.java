@@ -16,8 +16,6 @@ import com.revature.project1.util.JDBCConnectionUtil;
 
 public class UserDaoSQL implements IUserDao {
 
-    String url = "jdbc:postgresql://localhost:5436/postgres";
-
     /*
      * String ers_users_id = "ers_users_id";
      * String ers_username = "ers_username";
@@ -42,8 +40,7 @@ public class UserDaoSQL implements IUserDao {
 
             st.setString(1, userName);
             ResultSet rs = st.executeQuery();
-            ResultSetMetaData rsmd = rs.getMetaData();
-            int columnsNumber = rsmd.getColumnCount();
+
             while (rs.next()) {
 
                 res = Optional.of(new UserModel(rs.getString("user_first_name"), rs.getString("user_last_name"),

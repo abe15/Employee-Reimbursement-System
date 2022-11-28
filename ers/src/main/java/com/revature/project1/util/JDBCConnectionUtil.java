@@ -19,7 +19,7 @@ public class JDBCConnectionUtil {
     public static Connection getConnection() {
         if (conn == null) {
             try {
-                logger.info("Making a DB connection with creds: \nURL: %s \nUsername: %s \nPassword: %s",
+                logger.info("Making a DB connection with creds: \nURL: %s{} \nUsername: %s{} \nPassword: %s{}",
                         System.getenv("DB_URL"), System.getenv("DB_USERNAME"), System.getenv("DB_PASSWORD"));
                 Properties props = new Properties();
                 props.setProperty("user", "postgres");
@@ -32,5 +32,8 @@ public class JDBCConnectionUtil {
         }
         return conn;
 
+    }
+
+    private JDBCConnectionUtil() {
     }
 }

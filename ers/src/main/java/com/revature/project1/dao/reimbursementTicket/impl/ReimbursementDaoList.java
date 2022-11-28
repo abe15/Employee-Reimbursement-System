@@ -46,14 +46,14 @@ public class ReimbursementDaoList implements IReimbursementDao {
     }
 
     @Override
-    public void updateTicketStatusById(Integer id, Integer statusId, Integer resolver) {
+    public int updateTicketStatusById(Integer id, Integer statusId, Integer resolver) {
 
         for (ReimbursementTicketModel ticket : tickets) {
             if (ticket.getReimbId() == id) {
                 ticket.setReimbResolved(null);
             }
         }
-
+        return 1;
     }
 
 }

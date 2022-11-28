@@ -44,7 +44,7 @@ public class UserController {
             boolean isCreated = uServ.registerUser(target);
 
             // check whether registration was successful
-            if (isCreated == true) {
+            if (isCreated) {
                 ctx.result("The new user has been created successfully.");
                 ctx.status(HttpCode.CREATED);
             } else {
@@ -85,31 +85,31 @@ public class UserController {
 
         private String password;
 
-        public UsernamePasswordCombo() {
-        }
     }
 
     public static Handler login = ctx -> {
 
-        logger.info("User attempting to login...");
+        logger.info("Login handler called");
         String body = ctx.body();
         ObjectMapper om = new ObjectMapper();
         om.registerModule(new JavaTimeModule());
         try {
+            logger.info("Attempting to parse login and password");
             UsernamePasswordCombo target = om.readValue(body, UsernamePasswordCombo.class);
+            logger.info("Successful parsing");
             Optional<UserModel> user = uServ.login(target.getUsername(), target.getPassword());
 
             // 4. render the response
             if (user.isPresent()) {
-                logger.info("User log in successful");
+
                 ctx.html("User log in successful");
                 String jws = Jwts.builder().setSubject(target.getUsername()).claim("user-id", user.get().getUserId())
-                        .claim("user-role", 1)
+                        .claim("user-role", user.get().getUserRoleId())
                         .signWith(SecretKeyHolder.key).compact();
                 ctx.result(jws);
                 ctx.status(HttpCode.ACCEPTED);
             } else {
-                logger.info("Invalid username or password");
+
                 ctx.html("Invalid username or password");
                 ctx.status(HttpCode.UNAUTHORIZED);
             }
@@ -122,25 +122,6 @@ public class UserController {
 
     };
 
-    public static Handler getAllUsers = ctx -> {
-
-        logger.info("Getting all Users...");
-
-        String body = ctx.body();
-        ObjectMapper om = new ObjectMapper();
-        om.registerModule(new JavaTimeModule());
-        UsernamePasswordCombo target = om.readValue(body, UsernamePasswordCombo.class);
-        boolean loginSuccessful = false;// uServ.login(target.getUsername(), target.getPassword());
-
-        // 4. render the response
-        if (loginSuccessful == true) {
-            ctx.html("User log in successful");
-            String jws = Jwts.builder().setSubject(target.getUsername()).signWith(SecretKeyHolder.key).compact();
-            ctx.result(jws);
-            ctx.status(HttpCode.ACCEPTED);
-        } else {
-            ctx.html("User log in failed");
-            ctx.status(HttpCode.UNAUTHORIZED);
-        }
-    };
+    private UserController() {
+    }
 }

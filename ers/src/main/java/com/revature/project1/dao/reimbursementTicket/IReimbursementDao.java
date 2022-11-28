@@ -14,6 +14,6 @@ public interface IReimbursementDao {
 
     public int save(ReimbursementTicketModel t);
 
-    public void updateTicketStatusById(Integer id, Integer statusId, Integer resolver);
+    public int updateTicketStatusById(Integer id, Integer statusId, Integer resolver);
 
 }

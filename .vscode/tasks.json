@@ -5,7 +5,10 @@
       "type": "java (build)",
       "paths": ["${workspace}"],
       "isFullBuild": true,
-      "group": "build",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
       "problemMatcher": [],
       "label": "java (build): Build Workspace",
       "detail": "$(tools) Build all the Java projects in workspace."
