@@ -32,6 +32,10 @@ public class UserDaoSQL implements IUserDao {
         conn = JDBCConnectionUtil.getConnection();
     }
 
+    public UserDaoSQL(Connection conn) {
+        this.conn = conn;
+    }
+
     @Override
     public Optional<UserModel> findByUserName(String userName) {
         Optional<UserModel> res;

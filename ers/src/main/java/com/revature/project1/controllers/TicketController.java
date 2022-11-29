@@ -100,7 +100,7 @@ public class TicketController {
 
         }
 
-        ctx.result(tickets.toString());
+        ctx.json(tickets.toString());
         ctx.status(HttpCode.CREATED);
     };
 
@@ -131,7 +131,7 @@ public class TicketController {
 
         }
 
-        ctx.result(tickets.toString());
+        ctx.json(tickets.toString());
         ctx.status(HttpCode.OK);
     };
 
