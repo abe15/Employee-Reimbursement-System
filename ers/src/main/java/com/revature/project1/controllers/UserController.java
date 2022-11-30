@@ -106,7 +106,9 @@ public class UserController {
                 String jws = Jwts.builder().setSubject(target.getUsername()).claim("user-id", user.get().getUserId())
                         .claim("user-role", user.get().getUserRoleId())
                         .signWith(SecretKeyHolder.key).compact();
+
                 ctx.result(jws);
+                ctx.cookie("username", user.get().getUsername());
                 ctx.status(HttpCode.ACCEPTED);
             } else {
 

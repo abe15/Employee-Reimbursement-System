@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
+
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 public class ReimbursementTicketModel {
@@ -17,10 +17,18 @@ public class ReimbursementTicketModel {
     private LocalDateTime reimbResolved;
     private String reimbDescription;
     private String reimbReceipt;
-    private Integer reimbStatusId;
     private Integer reimbAuthor;
     private Integer reimbResolver;
     private String reimbTypeName;
+    private TicketStatus reimbStatus;
+
+    public TicketStatus getReimbStatus() {
+        return reimbStatus;
+    }
+
+    public void setReimbStatus(TicketStatus reimbStatus) {
+        this.reimbStatus = reimbStatus;
+    }
 
     public String getReimbTypeName() {
         return reimbTypeName;
@@ -28,7 +36,7 @@ public class ReimbursementTicketModel {
 
     public void setReimbTypeName(String reimbTypeName) {
         // --lodging 1, travel 2, food 3, other 4
-        switch (reimbTypeName) {
+        switch (reimbTypeName.toUpperCase()) {
             case "LODGING":
                 reimbTypeId = 1;
                 break;
@@ -120,12 +128,16 @@ public class ReimbursementTicketModel {
         this.reimbReceipt = reimbReceipt;
     }
 
-    public Integer getReimbStausId() {
-        return reimbStatusId;
+    public Integer getReimbStatusId() {
+        return reimbStatus.toInteger();
     }
 
-    public void setReimbStausId(Integer reimbStatusType) {
-        this.reimbStatusId = reimbStatusType;
+    public void setReimbStatusId(Integer reimbStatusType) {
+        this.reimbStatus = TicketStatus.fromInteger(reimbStatusType);
+    }
+
+    public void setReimbStatusName(String reimbStatusType) {
+        this.reimbStatus = TicketStatus.valueOf(reimbStatusType.toUpperCase());
     }
 
     public Integer getReimbAuthor() {
@@ -148,7 +160,7 @@ public class ReimbursementTicketModel {
     }
 
     public ReimbursementTicketModel(int reimbId, int reimbTypeId, double reimbAmount, LocalDateTime reimbSubmitted,
-            LocalDateTime reimbResolved, String reimbDescription, String reimbReceipt, Integer reimbType,
+            LocalDateTime reimbResolved, String reimbDescription, String reimbReceipt, TicketStatus reimbType,
             Integer reimbAuthor, Integer reimbResolver) {
         this.reimbId = reimbId;
         this.reimbTypeId = reimbTypeId;
@@ -157,7 +169,7 @@ public class ReimbursementTicketModel {
         this.reimbResolved = reimbResolved;
         this.reimbDescription = reimbDescription;
         this.reimbReceipt = reimbReceipt;
-        this.reimbStatusId = reimbType;
+        this.reimbStatus = reimbType;
         this.reimbAuthor = reimbAuthor;
         this.reimbResolver = reimbResolver;
     }
@@ -176,4 +188,5 @@ public class ReimbursementTicketModel {
         }
         return json;
     }
+
 }

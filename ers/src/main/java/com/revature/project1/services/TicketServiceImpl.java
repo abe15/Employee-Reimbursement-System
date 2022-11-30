@@ -32,7 +32,7 @@ public class TicketServiceImpl implements ITicketService {
     }
 
     @Override
-    public List<ReimbursementTicketModel> getAllReimTickets(Map<String, String> m) {
+    public List<ReimbursementTicketModel> getAllReimTickets() {
         return ticketDao.getAll();
     }
 
@@ -44,7 +44,7 @@ public class TicketServiceImpl implements ITicketService {
 
     @Override
     public int updateReimbTicket(ReimbursementTicketModel ticket) {
-        return ticketDao.updateTicketStatusById(ticket.getReimbId(), ticket.getReimbStausId(),
+        return ticketDao.updateTicketStatusById(ticket.getReimbId(), ticket.getReimbStatusId(),
                 ticket.getReimbResolver());
 
     }

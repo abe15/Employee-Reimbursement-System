@@ -67,7 +67,7 @@ public class App {
             return Role.ANYONE;
         }
         Integer roleId = 0;
-
+        System.out.print("asdasdasdsad" + ctx.cookie("username"));
         try {
             Claims claims = (Claims) Jwts.parserBuilder().setSigningKey(SecretKeyHolder.key)
                     .build()

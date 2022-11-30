@@ -9,7 +9,7 @@ public interface ITicketService {
 
     public boolean submitReimbTicket(ReimbursementTicketModel ticket);
 
-    public List<ReimbursementTicketModel> getAllReimTickets(Map<String, String> m);
+    public List<ReimbursementTicketModel> getAllReimTickets();
 
     public List<ReimbursementTicketModel> getAllReimTicketsByUserName(Integer username);
 

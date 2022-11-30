@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.revature.project1.models.ReimbursementTicketModel;
-
+import com.revature.project1.models.TicketStatus;
 import com.revature.project1.services.ITicketService;
 
 import com.revature.project1.services.TicketServiceImpl;
@@ -32,6 +32,10 @@ public class TicketController {
 
     private static ITicketService tServ = new TicketServiceImpl();
 
+    public TicketController(ITicketService tServ) {
+        this.tServ = tServ;
+    }
+
     // handle ticket submission
     public static Handler submitTicket = ctx -> {
 
@@ -48,7 +52,7 @@ public class TicketController {
             t.setReimbAmount(Double.parseDouble(jsonNode.get("reimbAmount").asText()));
             t.setReimbSubmitted(LocalDateTime.now());
             t.setReimbDescription(jsonNode.get("reimbDescription").asText());
-            t.setReimbStausId(1);
+            t.setReimbStatus(TicketStatus.PENDING);
             t.setReimbTypeId(Integer.parseInt(jsonNode.get("reimbTypeId").asText()));
             t.setReimbAuthor(Integer.parseInt(ctx.attribute("user-id")));
 
@@ -89,7 +93,7 @@ public class TicketController {
 
         if (m.get("reimb_status_id") != null) {
             tickets = tickets.stream()
-                    .filter(t -> t.getReimbStausId().toString().equals(m.get("reimb_status_id")))
+                    .filter(t -> t.getReimbStatusId().toString().equals(m.get("reimb_status_id")))
                     .collect(Collectors.toList());
 
         }
@@ -116,11 +120,11 @@ public class TicketController {
         }
 
         // String[] jwtHeaders = parseJwt(ctx);
-        List<ReimbursementTicketModel> tickets = tServ.getAllReimTickets(m);
+        List<ReimbursementTicketModel> tickets = tServ.getAllReimTickets();
 
         if (m.get("reimb_status_id") != null) {
             tickets = tickets.stream()
-                    .filter(t -> t.getReimbStausId().toString().equals(m.get("reimb_status_id")))
+                    .filter(t -> t.getReimbStatusId().toString().equals(m.get("reimb_status_id")))
                     .collect(Collectors.toList());
 
         }
@@ -148,7 +152,9 @@ public class TicketController {
 
             t.setReimbId(Integer.parseInt(jsonNode.get("reimbId").asText()));
             t.setReimbResolver(Integer.parseInt(ctx.attribute("user-id")));
-            t.setReimbStausId(Integer.parseInt(jsonNode.get("reimbStatusId").asText()));
+
+            t.setReimbStatusName(jsonNode.get("reimbStatus").asText());
+            // t.setReimbStatusId(Integer.parseInt(jsonNode.get("reimbStatusId").asText()));
 
             // 3. do service call
             Integer isUpdated = tServ.updateReimbTicket(t);
@@ -159,7 +165,7 @@ public class TicketController {
                 ctx.result("Ticket succesfully updated");
                 ctx.status(HttpCode.ACCEPTED);
             } else if (isUpdated < 0) {
-                logger.info("Ticket succesfully updated");
+                logger.info("Ticket not updated");
                 ctx.result("Can only update from Pending to Approved or Denined");
                 ctx.status(HttpCode.BAD_REQUEST);
             } else {

@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 
 import com.revature.project1.dao.reimbursementTicket.IReimbursementDao;
 import com.revature.project1.models.ReimbursementTicketModel;
+import com.revature.project1.models.TicketStatus;
 import com.revature.project1.util.JDBCConnectionUtil;
 
 public class ReimbursementDaoSql implements IReimbursementDao {
@@ -42,7 +43,7 @@ public class ReimbursementDaoSql implements IReimbursementDao {
         logger.info("Querying all tickets");
 
         List<ReimbursementTicketModel> res = new ArrayList<>();
-
+        // TicketStatus.valueOf("1");
         try (PreparedStatement st = conn.prepareStatement("SELECT * FROM ers_reimbursement;");) {
 
             ResultSet rs = st.executeQuery();
@@ -99,7 +100,7 @@ public class ReimbursementDaoSql implements IReimbursementDao {
             st.setDouble(1, t.getReimbAmount());
             st.setTimestamp(2, Timestamp.valueOf(t.getReimbSubmitted()));
             st.setString(3, t.getReimbDescription());
-            st.setInt(5, t.getReimbStausId());
+            st.setInt(5, t.getReimbStatusId());
             st.setInt(4, t.getReimbAuthor());
             st.setInt(6, t.getReimbTypeId());
 
@@ -158,7 +159,8 @@ public class ReimbursementDaoSql implements IReimbursementDao {
 
         }
 
-        t.setReimbStausId(rs.getInt("reimb_status_id"));
+        t.setReimbStatus(TicketStatus.fromInteger(rs.getInt("reimb_status_id")));
+        // t.setReimbStatus(null);
         t.setReimbTypeId(rs.getInt("reimb_type_id"));
 
         return t;
