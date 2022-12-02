@@ -1,7 +1,7 @@
 package com.revature.project1.models;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
+
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 public class UserModel {

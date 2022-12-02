@@ -49,7 +49,7 @@ public class UserServiceTest {
 	}
 
 	@Test
-	@DisplayName("1. Test Log in - Correct password") //this annotation will allow you to give your test case a custom, readable name in the TestRunner
+	@DisplayName("1. Test Log in - Correct username password -Existing User") 
 	void testCorrectLogin() {
 		
 		//mocking userDao call

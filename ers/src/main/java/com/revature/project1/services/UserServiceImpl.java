@@ -1,7 +1,7 @@
 package com.revature.project1.services;
 
 import com.revature.project1.dao.user.IUserDao;
-import com.revature.project1.dao.user.impl.UserDaoSQL;
+
 import com.revature.project1.models.UserModel;
 
 import java.util.Optional;
@@ -13,11 +13,7 @@ public class UserServiceImpl implements IUserService {
 
     private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    private static IUserDao userDao;
-
-    public UserServiceImpl() {
-        userDao = new UserDaoSQL();
-    }
+    private IUserDao userDao;
 
     public UserServiceImpl(IUserDao ud) {
         this.userDao = ud;

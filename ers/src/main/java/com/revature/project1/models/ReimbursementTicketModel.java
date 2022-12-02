@@ -1,9 +1,6 @@
 package com.revature.project1.models;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

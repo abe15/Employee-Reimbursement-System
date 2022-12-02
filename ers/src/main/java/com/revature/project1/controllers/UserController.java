@@ -6,13 +6,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import com.revature.project1.models.Role;
 import com.revature.project1.models.UserModel;
 import com.revature.project1.services.IUserService;
-import com.revature.project1.services.UserServiceImpl;
+
 import com.revature.project1.util.SecretKeyHolder;
 
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import io.javalin.Javalin;
 import io.javalin.http.Handler;
 import io.javalin.http.HttpCode;
 
@@ -22,7 +24,18 @@ public class UserController {
 
     private static Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    private static IUserService uServ = new UserServiceImpl();
+    private static IUserService uServ;
+
+    public UserController(IUserService uServ, Javalin app) {
+
+        this.uServ = uServ;
+        // Registration and token retrieval
+        String registerUrl = "/users";
+        String loginUrl = "/session";
+
+        app.post(registerUrl, UserController.register, Role.ANYONE);
+        app.post(loginUrl, UserController.login, Role.ANYONE);
+    }
 
     // handle registration request
     public static Handler register = ctx -> {
@@ -87,6 +100,7 @@ public class UserController {
 
     }
 
+    // Login - if successful, returns jwt to user
     public static Handler login = ctx -> {
 
         logger.info("Login handler called");
@@ -124,6 +138,4 @@ public class UserController {
 
     };
 
-    private UserController() {
-    }
 }

@@ -17,23 +17,37 @@ import com.revature.project1.models.ReimbursementTicketModel;
 import com.revature.project1.models.TicketStatus;
 import com.revature.project1.services.ITicketService;
 
-import com.revature.project1.services.TicketServiceImpl;
+import io.javalin.Javalin;
 
-import com.revature.project1.util.SecretKeyHolder;
-
-import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import io.javalin.http.HttpCode;
-import io.jsonwebtoken.*;
+
+import com.revature.project1.models.*;
 
 public class TicketController {
 
     private static Logger logger = LoggerFactory.getLogger(TicketController.class);
 
-    private static ITicketService tServ = new TicketServiceImpl();
+    private static ITicketService tServ;
 
-    public TicketController(ITicketService tServ) {
+    // api endpoints
+    String reimbUrl = "/reimb-tickets";
+    String reimbUrlAll = "/reimb-tickets/all";
+
+    public TicketController(ITicketService tServ, Javalin app) {
         this.tServ = tServ;
+
+        // Ticket submission
+        app.post(reimbUrl, TicketController.submitTicket, Role.EMPLOYEE, Role.ADMIN, Role.MANAGER);
+
+        // update ticket status
+        app.patch(reimbUrl, TicketController.updateTicketStatus, Role.ADMIN, Role.MANAGER);
+
+        // Employee ticket search
+        app.get(reimbUrl, TicketController.getTicketsEmployee, Role.EMPLOYEE, Role.ADMIN, Role.MANAGER);
+
+        // Manager elevated ticket search
+        app.get(reimbUrlAll, TicketController.getAllReimbTickets, Role.ADMIN, Role.MANAGER);
     }
 
     // handle ticket submission
@@ -119,7 +133,6 @@ public class TicketController {
             m.put("reimb_author", ctx.queryParam("reimbAuthor"));
         }
 
-        // String[] jwtHeaders = parseJwt(ctx);
         List<ReimbursementTicketModel> tickets = tServ.getAllReimTickets();
 
         if (m.get("reimb_status_id") != null) {
@@ -154,7 +167,6 @@ public class TicketController {
             t.setReimbResolver(Integer.parseInt(ctx.attribute("user-id")));
 
             t.setReimbStatusName(jsonNode.get("reimbStatus").asText());
-            // t.setReimbStatusId(Integer.parseInt(jsonNode.get("reimbStatusId").asText()));
 
             // 3. do service call
             Integer isUpdated = tServ.updateReimbTicket(t);
