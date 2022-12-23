@@ -20,10 +20,10 @@ import com.revature.project1.controllers.TicketController;
 
 public class App {
 
+    // Inject all dependencies
     public static void main(String[] args) {
 
-        // Inject all dependencies
-        Javalin app = Javalin.create();
+        Javalin app = Javalin.create().start(7070);
 
         // Authentication and Authorization
         app._conf.accessManager(new AuthService());
@@ -39,8 +39,6 @@ public class App {
         // Passing the services to the controllers
         TicketController tController = new TicketController(tServ, app);
         UserController uController = new UserController(uServ, app);
-
-        app.start(7070);
 
     }
 
